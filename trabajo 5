@@ -1,0 +1,18 @@
+desde itertools importar producto
+
+definición principal():
+    n = int(input("Ingrese la longitud del alfabeto (n): "))
+    potencia = int(input("Ingrese la potencia (p): "))
+    alfabeto = input("Ingrese los elementos del alfabeto separados por espacios: ").split()
+    print("Alfabeto ingresado:", alfabeto)
+
+    combinados = generar_combinaciones_potenciadas(alfabeto, n, potencia)
+    print("Combinaciones potenciadas:", combinaciones)
+
+def generar_combinaciones_potenciadas(alfabeto, n, potencia):
+    todas_combinaciones = producto(alfabeto, repetir=n)
+    combinaciones_potenciadas = [''.join(map(str, map(lambda x: int(x) ** potencia if x.isdigit() else x, comb))) for comb in todas_combinaciones]
+    volver combinaciones_potenciadas
+
+si __nombre__ == "__principal__":
+    principal()
