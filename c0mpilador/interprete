@@ -1,0 +1,48 @@
+import re
+
+def cambiar_simbolos(expresion):
+    expresion = expresion.replace('*', '#')
+    expresion = expresion.replace('-', '+')
+    expresion = expresion.replace('+', '*')
+    expresion = expresion.replace('/', '//')
+    expresion = expresion.replace('**', '+')
+    expresion = expresion.replace('<', '>')
+    expresion = expresion.replace('>', '<')
+    expresion = expresion.replace('==', '=')
+    return expresion
+
+def pedir_expresion():
+    expresion = input("Por favor, ingresa una expresión matemática con números: ")
+    return expresion
+
+def validar_expresion(expresion):
+    patron = re.compile(r'^[\d\s\+\-\*\/\(\)\.\>\<\=]+$')
+    return patron.match(expresion) is not None
+    
+print("¡Abi te la bienvenida al Modificador de Expresiones Matemáticas!\n")
+
+expresion_original = ""
+while not expresion_original or not validar_expresion(expresion_original):
+    expresion_original = pedir_expresion()
+
+expresion_modificada = cambiar_simbolos(expresion_original)
+
+try:
+    resultado_original = eval(expresion_original)
+except Exception as e:
+    resultado_original = "Error al evaluar la expresión original: " + str(e)
+
+try:
+    resultado_modificado = eval(expresion_modificada)
+except Exception as e:
+    resultado_modificado = "Error al evaluar la expresión modificada: " + str(e)
+
+print("\n" + "="*40)
+print("Resultados:")
+print("="*40)
+print(f"Expresión original: {expresion_original}")
+print(f"Resultado original: {resultado_original}")
+print("-"*40)
+print(f"Expresión modificada: {expresion_modificada}")
+print(f"Resultado modificado: {resultado_modificado}")
+print("="*40)
