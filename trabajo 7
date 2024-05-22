@@ -1,0 +1,67 @@
+import re
+
+reemplazos = {
+    "*": "⋄",
+    "-": "—",
+    "+": "*",
+    "/": "//",
+    "**": "+",
+    "<": ">",
+    ">": "<",
+    "==": "="
+}
+
+def cambiar_simbolos(expresion):
+ 
+    for simbolo_original, simbolo_modificado in reemplazos.items():
+        expresion = expresion.replace(simbolo_original, simbolo_modificado)
+    return expresion
+
+def pedir_expresion():
+   
+    expresion = input("Por favor, ingresa una expresión matemática con números: ")
+    return expresion
+
+
+def validar_expresion(expresion):
+    patron = re.compile(r'^[\d\s\+\-\*\/\(\)\.\>\<\=]+$')
+    return patron.match(expresion) is not None
+
+
+def evaluar_expresion(expresion):
+    
+    tokens = re.findall(r'(\d+|\S)', expresion)
+   
+    expresion_actualizada = expresion
+    for simbolo_original, simbolo_modificado in reemplazos.items():
+        expresion_actualizada = expresion_actualizada.replace(simbolo_modificado, simbolo_original)
+   
+    try:
+        return eval(expresion_actualizada)
+    except Exception as e:
+        return "Error al evaluar la expresión: " + str(e)
+
+
+print("¡ABI te da la bienvenida!\n")
+
+
+expresion_original = ""
+while not expresion_original or not validar_expresion(expresion_original):
+    expresion_original = pedir_expresion()
+
+
+expresion_modificada = cambiar_simbolos(expresion_original)
+
+resultado_original = evaluar_expresion(expresion_original)
+
+resultado_modificado = evaluar_expresion(expresion_modificada)
+
+print("\n" + "="*40)
+print("Resultados:")
+print("="*40)
+print(f"Expresión original: {expresion_original}")
+print(f"Resultado original: {resultado_original}")
+print("-"*40)
+print(f"Expresión modificada: {expresion_modificada}")
+print(f"Resultado modificado: {resultado_modificado}")
+print("="*40)
