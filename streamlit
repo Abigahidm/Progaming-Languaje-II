@@ -1,0 +1,53 @@
+import streamlit as st
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+def load_data(file):
+    return pd.read_csv(file)
+
+def data_summary(data):
+    st.subheader("Resumen de Datos")
+    st.write(data.head())  # Mostrar los primeros registros del DataFrame
+    st.write(data.describe())  # Mostrar estadísticas descriptivas
+
+def data_visualization(data):
+    st.subheader("Visualización de Datos")
+    st.write("Seleccione las columnas para visualizar")
+    columns = data.columns.tolist()
+    selected_columns = st.multiselect("Columnas", columns)
+    if selected_columns:
+        sns.pairplot(data[selected_columns])
+        st.pyplot()
+
+def linear_regression(data):
+    st.subheader("Regresión Lineal")
+    st.write("Seleccione las columnas para la regresión")
+    columns = data.columns.tolist()
+    x_column = st.selectbox("Variable independiente (X)", columns)
+    y_column = st.selectbox("Variable dependiente (Y)", columns)
+    if x_column and y_column:
+        X = data[[x_column]]
+        y = data[y_column]
+        model = LinearRegression()
+        model.fit(X, y)
+        coef = model.coef_[0]
+        intercept = model.intercept_
+        st.write(f"La ecuación de la recta de regresión es: Y = {coef:.2f}X + {intercept:.2f}")
+
+def main():
+    st.title("Aplicación de Análisis de Datos")
+    
+    # Lectura de datos
+    uploaded_file = st.file_uploader("Subir archivo CSV, ABIGAIL", type=["csv"])
+    if uploaded_file is not None:
+        data = load_data(uploaded_file)
+        
+        # Funcionalidades de la aplicación
+        data_summary(data)
+        data_visualization(data)
+        linear_regression(data)
+
+if _name_ == "_main_":
+    main()
