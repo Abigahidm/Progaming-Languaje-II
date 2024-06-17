@@ -1,0 +1,38 @@
+import streamlit as st
+import pandas as pd
+import numpy as np
+
+st.title('Aplicación de Análisis de Datos y Regresión Lineal')
+
+uploaded_file = st.file_uploader("Carga un archivo CSV", type=["csv"])
+
+delimiter = st.radio("Selecciona el delimitador del archivo CSV", options=[",", ";"], index=0)
+
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file, delimiter=delimiter)
+    
+    st.header('Vista Previa de los Datos')
+    st.write(df.head())
+
+    st.header('Estadísticas Descriptivas')
+    st.write(df.describe())
+
+    st.header('Regresión Lineal')
+    columns = df.columns
+    x_column = st.selectbox('Selecciona la columna X (independiente)', columns)
+    y_column = st.selectbox('Selecciona la columna Y (dependiente)', columns)
+
+    if st.button('Realizar Regresión Lineal'):
+        X = df[x_column].values.reshape(-1, 1)  
+        y = df[y_column].values
+
+        X_mean = np.mean(X)
+        y_mean = np.mean(y)
+        
+        numerator = np.sum((X - X_mean) * (y - y_mean))
+        denominator = np.sum((X - X_mean) ** 2)
+        coef = numerator / denominator
+        intercept = y_mean - coef * X_mean
+
+        st.write(f'Coeficiente: {coef}')
+        st.write(f'Intercepto: {intercept}')
